@@ -1,0 +1,146 @@
+# 反向双链表的 C 程序
+
+> 原文:[https://www . geeksforgeeks . org/c-反向程序-双向链表/](https://www.geeksforgeeks.org/c-program-for-reversing-a-doubly-linked-list/)
+
+给定一个[双链表](https://www.geeksforgeeks.org/doubly-linked-list/)，任务是反转给定的双链表。
+
+例如，见下图。
+
+```
+(a) Original Doubly Linked List 
+```
+
+![](img/ac986bf04212b6c02bcab8a71a5727c1.png)
+
+```
+(b) Reversed Doubly Linked List 
+```
+
+![](img/f8570d09b2d0146b6381105d1bf628ac.png)
+
+这里有一个简单的方法来反转双向链表。我们所需要做的就是交换所有节点的上一个和下一个指针，改变头(或开始)的上一个，最后改变头指针。
+
+## C
+
+```
+/* C Program to reverse a doubly 
+   linked list */
+#include <stdio.h>
+#include <stdlib.h>
+
+// A node of the doubly linked list 
+struct Node
+{
+  int data;
+  struct Node *next;
+  struct Node *prev;    
+};
+
+/* Function to reverse a Doubly 
+   Linked List */
+void reverse(struct Node **head_ref)
+{
+     struct Node *temp = NULL;  
+     struct Node *current = *head_ref;
+
+     /* Swap next and prev for all nodes 
+        of doubly linked list */
+     while (current !=  NULL)
+     {
+       temp = current->prev;
+       current->prev = current->next;
+       current->next = temp;              
+       current = current->prev;
+     }      
+
+     /* Before changing head, check for the 
+        cases like empty list and list with 
+        only one node */
+     if(temp != NULL )
+        *head_ref = temp->prev;
+}     
+
+// UTILITY FUNCTIONS 
+/* Function to insert a node at the beginning 
+   of the Doubly Linked List */
+void push(struct Node** head_ref, 
+          int new_data)
+{
+    // Allocate node 
+    struct Node* new_node =
+           (struct Node*) malloc(sizeof(struct Node));
+
+    // Put in the data  
+    new_node->data  = new_data;
+
+    /* Since we are adding at the beginning, 
+       prev is always NULL */
+    new_node->prev = NULL;
+
+    /* Link the old list off the new node */
+    new_node->next = (*head_ref);    
+
+    /* Change prev of head node to new node */
+    if((*head_ref) !=  NULL)
+      (*head_ref)->prev = new_node ;    
+
+    /* move the head to point to the new node */
+    (*head_ref)    = new_node;
+}
+
+/* Function to print nodes in a given 
+   doubly linked list. This function is 
+   same as printList() of singly linked list */
+void printList(struct Node *node)
+{
+  while(node!=NULL)
+  {
+   printf("%d ", node->data);
+   node = node->next;
+  }
+} 
+
+// Driver code
+int main()
+{
+  // Start with the empty list 
+  struct Node* head = NULL;
+
+  /* Let us create a sorted linked list 
+     to test the functions. Created linked list 
+     will be 10->8->4->2 */
+  push(&head, 2);
+  push(&head, 4);
+  push(&head, 8);
+  push(&head, 10);
+
+  printf(
+  "Original Linked list ");
+  printList(head);
+
+  // Reverse doubly linked list 
+  reverse(&head);
+
+  printf(
+  "Reversed Linked list ");
+  printList(head);           
+
+  getchar();
+}
+```
+
+**输出:**
+
+```
+Original linked list 
+10 8 4 2 
+The reversed Linked List is 
+2 4 8 10
+```
+
+**时间复杂度:** O(N)，其中 N 表示双向链表中的节点数。
+辅助空间:O(1)
+我们也可以交换数据而不是指针来反转双链表。[反转数组的方法](https://www.geeksforgeeks.org/write-a-program-to-reverse-an-array-or-string/)可以用来交换数据。与指针相比，如果数据项的大小更大，交换数据的成本会更高。
+如发现以上代码/算法有不正确的地方，请写评论，或者找到更好的方法解决同样的问题。
+
+更多详情请参考[反向双链表](https://www.geeksforgeeks.org/reverse-a-doubly-linked-list/)整篇文章！
